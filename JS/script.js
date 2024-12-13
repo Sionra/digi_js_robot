@@ -59,7 +59,7 @@ class RobotAspi {
                 return "haut"
             }
         } else if (direction === "droite") {
-            if ((((this.x) * 2 + (this.y-1) * 2) < ((this.x + 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2)) && this.check(this.x,this.y-1,plateau,this.retourBase)){
+            if ((((this.x) * 2 + (this.y-1) * 2) < ((this.x + 1) * 2 + (this.y) * 2)&& (((this.x) * 2 + (this.y-1) * 2) < ((this.x) * 2 + (this.y + 1) * 2))) && this.check(this.x,this.y-1,plateau,this.retourBase)){
                 return "haut"
             } else if ((((this.x + 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2))&& this.check(this.x-1,this.y ,plateau,this.retourBase)) {
                 return "droite"
@@ -67,7 +67,7 @@ class RobotAspi {
                 return "bas"
             }
         } else if (direction === "gauche") {
-            if ((((this.x) * 2 + (this.y-1) * 2) < ((this.x - 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2))&& this.check(this.x,this.y-1,plateau,this.retourBase)) {
+            if ((((this.x) * 2 + (this.y-1) * 2) < ((this.x - 1) * 2 + (this.y) * 2)&& (((this.x) * 2 + (this.y-1) * 2) < ((this.x) * 2 + (this.y + 1) * 2)))&& this.check(this.x,this.y-1,plateau,this.retourBase)) {
                 return "haut"
             } else if ((((this.x - 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2)) && this.check(this.x-1,this.y,plateau,this.retourBase)){
                 return "gauche"
@@ -75,7 +75,7 @@ class RobotAspi {
                 return "bas"
             }
         } else if (direction === "bas") {
-            if ((((this.x) * 2 + (this.y+1) * 2) < ((this.x + 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.x - 1) * 2)) && this.check(this.x,this.y+1,plateau,this.retourBase)){
+            if ((((this.x) * 2 + (this.y+1) * 2) < ((this.x + 1) * 2 + (this.y) * 2) && (((this.x) * 2 + (this.y+1) * 2) < ((this.x) * 2 + (this.x - 1) * 2))) && this.check(this.x,this.y+1,plateau,this.retourBase)){
                 return "bas"
             } else if ((((this.x + 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.x - 1) * 2)) && this.check(this.x+1,this.y,plateau,this.retourBase)){
                 return "droite"
@@ -219,6 +219,11 @@ function htmlGeneration(plateau) {
 function htmlUpdate(plateau){
         let table = document.querySelector('table');
         let rows = table.rows
+        rows.map((row, indexY) => {
+            row.map((cell, indexX) => {
+                rows[indexY][indexX] = plateau[indexY][indexX]
+            })
+        })
 }
 
 partie = creationParti(0, 0, 20, 5, 5, 0.4)
