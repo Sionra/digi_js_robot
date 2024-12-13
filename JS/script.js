@@ -1,14 +1,14 @@
 //Permet de check si une case existe
-function check(x, y, plateau) {
-    if (plateau[y] === undefined ) {
+function check(x, y, plateau, retourBase) {
+    if (plateau[y] === undefined) {
         return false;
     }
-    return plateau[y][x] !== undefined && plateau[y][x] !== -1;
+    return plateau[y][x] !== undefined && plateau[y][x] !== -1 || retourBase;
 
 }
 
 //Permet d'afficher le plateau
-function show(plateau,robot) {
+function show(plateau, robot) {
     plateau.map((line) => {
         console.log(line);
     })
@@ -53,6 +53,11 @@ class RobotAspi {
         this.positionBase = [x, y]
         this.energieMax = energieMax
         this.energieActuelle = this.energieMax
+        this.retourBase = false
+    }
+
+    retourBase(plateau) {
+
     }
 
     //Fait la direction du robot
@@ -73,29 +78,36 @@ class RobotAspi {
     }
 
     //Deplace le robot
-    move(direction,plateau) {
+    move(direction, plateau) {
         switch (direction) {
             case "haut":
-                plateau [this.x][this.y] = -1
+                plateau [this.y][this.x] = -1
                 this.y--
+                console.log(`Le robot ce deplace vers le haut : ${this.x}, ${this.y}`)
                 break;
             case "bas":
-                plateau [this.x][this.y] = -1
+                plateau [this.y][this.x] = -1
                 this.y++
+                console.log(`Le robot ce deplace vers le bas : ${this.x}, ${this.y}`)
                 break;
             case "gauche":
-                plateau [this.x][this.y] = -1
+                plateau [this.y][this.x] = -1
                 this.x--
+                console.log(`Le robot ce deplace vers la gauche : ${this.x}, ${this.y}`)
                 break;
             case "droite":
-                plateau [this.x][this.y] = -1
+                plateau [this.y][this.x] = -1
                 this.x++
+                console.log(`Le robot ce deplace vers la droite : ${this.x}, ${this.y}`)
                 break;
+
             default:
                 console.log("Mauvaise direction")
                 break;
         }
-        console.log(plateau)
+    }
+
+    moveToBase(plateau) {
     }
 
     clean(plateau) {
@@ -105,23 +117,32 @@ class RobotAspi {
     }
 }
 
-function creationParti(postionXRobot, postionYRobot, energieMax, tailleXPlateau,tailleYPlateau,pourcentageSalete) {
-    let robotAspi = new RobotAspi(postionXRobot,postionYRobot,energieMax)
-    let plateau = createMap(tailleXPlateau, tailleYPlateau, pourcentageSalete )
+function creationParti(postionXRobot, postionYRobot, energieMax, tailleXPlateau, tailleYPlateau, pourcentageSalete) {
+    let robotAspi = new RobotAspi(postionXRobot, postionYRobot, energieMax)
+    let plateau = createMap(tailleXPlateau, tailleYPlateau, pourcentageSalete)
     return [robotAspi, plateau]
 }
 
 function parti(robotAspi, plateau) {
+    taillePlateau = partie[1].length * partie[1][0].length
+
     setInterval(() => {
-        robotAspi.move(robotAspi.choixDirection(plateau), plateau)
+        if(taillePlateau !==0) {
+            robotAspi.move(robotAspi.choixDirection(plateau), plateau)
+            taillePlateau--
+            show(plateau)
+
+        }else{
+            console.log("j'ai tout nettoyer")
+        }
     }, 1000)
 }
 
 
-partie = creationParti(0, 0, 20, 5, 5, 0.4)
+partie = creationParti(0, 0, 20, 3, 3, 0.4)
 plateau = partie[1]
 robot = partie[0]
 console.log(robot)
 console.log(plateau)
 //show(plateau)
-parti(robot,plateau)
+parti(robot, plateau)
