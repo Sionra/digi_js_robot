@@ -56,17 +56,17 @@ class RobotAspi {
     }
 
     //Fait la direction du robot
-    choixDirection() {
-        if (check(this.x, this.y - 1)) {
+    choixDirection(plateau) {
+        if (check(this.x, this.y - 1, plateau)) {
             return "haut"
         }
-        if (check(this.x + 1, this.y)) {
+        if (check(this.x + 1, this.y, plateau)) {
             return "droite"
         }
-        if (check(this.x, this.y + 1)) {
+        if (check(this.x, this.y + 1, plateau)) {
             return "bas"
         }
-        if (check(this.x - 1, this.y)) {
+        if (check(this.x - 1, this.y, plateau)) {
             return "gauche"
         }
 
@@ -95,6 +95,7 @@ class RobotAspi {
                 console.log("Mauvaise direction")
                 break;
         }
+        console.log(plateau)
     }
 
     clean(plateau) {
@@ -112,14 +113,15 @@ function creationParti(postionXRobot, postionYRobot, energieMax, tailleXPlateau,
 
 function parti(robotAspi, plateau) {
     setInterval(() => {
-        robotAspi.move(robotAspi.choixDirection())
+        robotAspi.move(robotAspi.choixDirection(plateau), plateau)
     }, 1000)
 }
 
 
-partie= creationParti(0, 0, 20, 5, 5, 0.4)
+partie = creationParti(0, 0, 20, 5, 5, 0.4)
 plateau = partie[1]
 robot = partie[0]
 console.log(robot)
 console.log(plateau)
-show(plateau)
+//show(plateau)
+parti(robot,plateau)
