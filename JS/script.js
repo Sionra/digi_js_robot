@@ -1,14 +1,6 @@
-//Permet de check si une case existe
-function check(x, y, plateau, retourBase) {
-    if (plateau[y] === undefined) {
-        return false;
-    }
-    return plateau[y][x] !== undefined && plateau[y][x] !== -1 || retourBase;
-
-}
-
 //Permet d'afficher le plateau
 function show(plateau, robot) {
+    console.clear()
     plateau.map((line) => {
         console.log(line);
     })
@@ -56,22 +48,70 @@ class RobotAspi {
         this.retourBase = false
     }
 
-    retourBase(plateau) {
 
+    choixDirectionRetour(plateau, direction) {
+        if (direction === "haut") {
+            if (((this.x + 1) * 2 + (this.y) * 2) < ((this.x - 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2)) {
+                return "droite"
+            } else if (((this.x - 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2)) {
+                return "gauche"
+            } else {
+                return "bas"
+            }
+        } else if (direction === "droite") {
+            if (((this.y - 1) * 2 + (this.y) * 2) < ((this.x - 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2)) {
+                return "haut"
+            } else if (((this.x - 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2)) {
+                return "gauche"
+            } else {
+                return "bas"
+            }
+        } else if (direction === "gauche") {
+            if (((this.y - 1) * 2 + (this.y) * 2) < ((this.x + 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2)) {
+                return "haut"
+            } else if (((this.x + 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.y + 1) * 2)) {
+                return "droite"
+            } else {
+                return "bas"
+            }
+        } else if (direction === "bas") {
+            if (((this.y - 1) * 2 + (this.y) * 2) < ((this.x + 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.x - 1) * 2)) {
+                return "haut"
+            } else if (((this.x + 1) * 2 + (this.y) * 2) < ((this.x) * 2 + (this.x - 1) * 2)) {
+                return "droite"
+            } else {
+                return "gauche"
+            }
+        }
+    }
+
+    moveToBase(plateau) {
+        let direction = "droite"
+        switch (direction) {
+            case "haut" :
+                return this.choixDirectionRetour(plateau, direction)
+            case "droite":
+                return this.choixDirectionRetour(plateau, direction)
+            case "gauche":
+                return this.choixDirectionRetour(plateau, direction)
+            case "bas":
+                return this.choixDirectionRetour(plateau, direction)
+
+        }
     }
 
     //Fait la direction du robot
     choixDirection(plateau) {
-        if (check(this.x, this.y - 1, plateau)) {
+        if (this.check(this.x, this.y - 1, plateau, this.retourBase)) {
             return "haut"
         }
-        if (check(this.x + 1, this.y, plateau)) {
+        if (this.check(this.x + 1, this.y, plateau, this.retourBase)) {
             return "droite"
         }
-        if (check(this.x, this.y + 1, plateau)) {
+        if (this.check(this.x, this.y + 1, plateau, this.retourBase)) {
             return "bas"
         }
-        if (check(this.x - 1, this.y, plateau)) {
+        if (this.check(this.x - 1, this.y, plateau, this.retourBase)) {
             return "gauche"
         }
 
@@ -107,8 +147,18 @@ class RobotAspi {
         }
     }
 
-    moveToBase(plateau) {
+//Permet de check si une case existe
+    check(x, y, plateau, retourBase) {
+        if (plateau[y] === undefined) {
+            return false;
+        }
+        if (plateau[y][x] === undefined) {
+            return false;
+        }
+        return plateau[y][x] !== -1 || retourBase;
+
     }
+
 
     clean(plateau) {
         if (plateau[this.x][this.y] > 0) {
@@ -127,22 +177,36 @@ function parti(robotAspi, plateau) {
     taillePlateau = partie[1].length * partie[1][0].length
 
     setInterval(() => {
-        if(taillePlateau !==0) {
+        if (taillePlateau !== 0) {
             robotAspi.move(robotAspi.choixDirection(plateau), plateau)
             taillePlateau--
             show(plateau)
 
-        }else{
+        } else {
             console.log("j'ai tout nettoyer")
         }
     }, 1000)
 }
 
+function htmlGeneration(plateau) {
+    let table = document.querySelector('table');
+    plateau.map((row) => {
+        let newRow = table.insertRow(-1)
+        row.map((cell) => {
+            let newCell = newRow.insertCell(-1)
+            let text = document.createElement('p')
+            text.innerText = cell
+            newCell.appendChild(text)
+        })
+    })
+    console.log(table)
+}
 
-partie = creationParti(0, 0, 20, 3, 3, 0.4)
+partie = creationParti(0, 0, 20, 5, 5, 0.4)
 plateau = partie[1]
 robot = partie[0]
 console.log(robot)
 console.log(plateau)
+//htmlGeneration(plateau)
 //show(plateau)
 parti(robot, plateau)
