@@ -199,7 +199,7 @@ function parti(robotAspi, plateau) {
             console.log("j'ai tout nettoyer")
         }
         show(plateau)
-    }, 200)
+    }, 1000)
 }
 
 function htmlGeneration(plateau) {
